@@ -1,4 +1,4 @@
 {
   "httpMethod": "POST",
-  "body": "{\"id\": \"123214\",\"name\": \"John Doe\",\"email\":\"john.doe@example.com\",\"phone\":\"16502065095\"\"bio\":\"\"}"
+  "body": "{\"id\": \"1234\",\"name\": \"John Stamos\",\"email\": \"john@stamos.com\",\"phone\": \"16502076045\",\"bio\": \"\"}"
 }

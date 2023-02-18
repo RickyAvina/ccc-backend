@@ -5,7 +5,7 @@ const dynamodb = require('aws-sdk/clients/dynamodb');
 const docClient = new dynamodb.DocumentClient();
 
 // sam local invoke -e events/event-post-item putItemFunction
-// sam local invoke -e events/event-create-user createUserFunction
+// sam local invoke -e events/event-create-user.json createUserFunction --env-vars env.json
 // putItemFunction
 
 // Get the DynamoDB table name from environment variables
@@ -14,7 +14,7 @@ const tableName = 'ccc-creator-studio-UserTable-JPN3IAVP0MY0'
 /**
  * A simple example includes a HTTP post method to add one item to a DynamoDB table.
  */
-exports.putItemHandler = async (event) => {
+exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
         throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);
     }
@@ -23,31 +23,34 @@ exports.putItemHandler = async (event) => {
 
     // Get id and name from the body of the request
     const body = JSON.parse(event.body);
-    const id = body.id;
-    const name = body.name;
+    const {id, name, email, phone, bio} = body;
+
+    // const id = body.id;
+    // const name = body.name;
 
     // Creates a new item, or replaces an old item with a new item
     // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#put-property
-    // let response = {};
+    
+    let response = {};
 
-    // try {
-    //     const params = {
-    //         TableName : tableName,
-    //         Item: { id : id, name: name }
-    //     };
+    try {
+        const params = {
+            TableName : tableName,
+            Item: { id : id, name: name, email, phone, bio }
+        };
     
-    //     const result = await docClient.put(params).promise();
+        const result = await docClient.put(params).promise();
     
-    //     response = {
-    //         statusCode: 200,
-    //         body: JSON.stringify(body)
-    //     };
-    // } catch (ResourceNotFoundException) {
-    //     response = {
-    //         statusCode: 404,
-    //         body: "Unable to call DynamoDB. Table resource not found."
-    //     };
-    // }
+        response = {
+            statusCode: 200,
+            body: JSON.stringify(body)
+        };
+    } catch (ResourceNotFoundException) {
+        response = {
+            statusCode: 404,
+            body: "Unable to call DynamoDB. Table resource not found."
+        };
+    }
 
     // All log statements are written to CloudWatch
     console.info(`response from: ${event.path} statusCode: ${response.statusCode} body: ${response.body}`);
