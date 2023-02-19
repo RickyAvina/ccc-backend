@@ -1,4 +1,4 @@
 {
   "httpMethod": "POST",
-  "body": "{\"id\": \"1234\",\"name\": \"John Stamos\",\"email\": \"john@stamos.com\",\"phone\": \"16502076045\",\"bio\": \"\"}"
+  "body": "{\"client_id\":\"IiFlcfW3cILDV65BrUepNXygMpAyRJfq\",\"email\":\"nrfddfdsdfdfsdsES@emaisl.COM\",\"password\":\"DFDF#$DF4$GFGFDF@123\",\"connection\":\"Username-Password-Authentication\",\"name\":\"Nudevo\",\"phone_number\":\"43431312\"}"
 }
