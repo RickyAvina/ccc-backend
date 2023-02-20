@@ -1,20 +1,19 @@
 // Create clients and set shared const values outside of the handler.
 const fetch = require('node-fetch');
+const dynamodb = require('aws-sdk/clients/dynamodb');
+const env = require("../../secret.json");
 
 // Get the DynamoDB table name from environment variables
 const userTable = process.env.USER_TABLE
-// const userTable = 'ccc-creator-studio-UserTable-JPN3IAVP0MY0'
-
 
 // Create a DocumentClient that represents the query to add an item
-const dynamodb = require('aws-sdk/clients/dynamodb');
 const docClient = new dynamodb.DocumentClient();
 
 // sam local invoke -e events/event-get-by-id.json getUserFunction
 // sam build; sam local invoke -e events/event-get-by-email.json loginFunction --env-vars env.json
 
 /**
- * A simple example includes a HTTP get method to get one item by id from a DynamoDB table.
+ * Authenticate and return a user.
  */
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -58,7 +57,7 @@ exports.handler = async (event) => {
 }
 
 async function getOauthToken(username, password) {
-  // throws errors
+  // Authenticate with Auth0, throws errors
 
   const params = new URLSearchParams({
     grant_type: "password",
@@ -66,8 +65,8 @@ async function getOauthToken(username, password) {
     password,
     audience: "https://dev-86rvru3cjw5ztru0.us.auth0.com/api/v2/",
     scope: "email",
-    client_id: "Gwr6p98ErOSQtJXBqMXGZ8XRzBRsPQY3",
-    client_secret: "ARxNu23OgnnISH_5Yl6BrAS6ouX2zrwbITDbgaACd3lnjmP2heV4TRjiMObyyYIE"
+    client_id: env.auth0.client_id,
+    client_secret: env.auth0.client_secret
   })
 
   const response = await fetch('https://dev-86rvru3cjw5ztru0.us.auth0.com/oauth/token', {
