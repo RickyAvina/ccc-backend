@@ -1,0 +1,7 @@
+{
+    "httpMethod": "GET",
+    "pathParameters": {
+        "username": "enrique@catalan.ai",
+        "password": "P3ssiTrash!"
+    }
+}
