@@ -73,10 +73,10 @@ Resources:
   #             Method: GET
 
   # This is a Lambda function config associated with the source code: get-by-id.js
-  getUserFunction:
+  loginFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: src/handlers/get-user-by-email.handler
+      Handler: src/handlers/login.handler
       Runtime: nodejs16.x
       Architectures:
         - x86_64
@@ -95,8 +95,8 @@ Resources:
         Api:
           Type: Api
           Properties:
-            Path: /get-user/{email}
-            Method: GET
+            Path: /login
+            Method: POST
 
   createUserFunction:
     Type: AWS::Serverless::Function

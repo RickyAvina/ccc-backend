@@ -1,7 +1,4 @@
 {
-    "httpMethod": "GET",
-    "pathParameters": {
-        "username": "enrique@catalan.ai",
-        "password": "P3ssiTrash!"
-    }
+    "httpMethod": "POST",
+    "body": "{\"username\": \"enrique@catalan.ai\",\"password\": \"P3ssiTrash!\"}"
 }

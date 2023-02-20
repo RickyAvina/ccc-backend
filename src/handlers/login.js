@@ -11,18 +11,19 @@ const dynamodb = require('aws-sdk/clients/dynamodb');
 const docClient = new dynamodb.DocumentClient();
 
 // sam local invoke -e events/event-get-by-id.json getUserFunction
-// sam build; sam local invoke -e events/event-get-by-email.json getUserFunction --env-vars env.json
+// sam build; sam local invoke -e events/event-get-by-email.json loginFunction --env-vars env.json
 
 /**
  * A simple example includes a HTTP get method to get one item by id from a DynamoDB table.
  */
 exports.handler = async (event) => {
-  if (event.httpMethod !== 'GET') {
-    throw new Error(`getMethod only accept GET method, you tried: ${event.httpMethod}`);
+  if (event.httpMethod !== 'POST') {
+    throw new Error(`getMethod only accept POST method, you tried: ${event.httpMethod}`);
   }
   // All log statements are written to CloudWatch
   console.info('received:', event);
-  const {username: email, password } = event.pathParameters;
+  const body = JSON.parse(event.body);
+  const {username: email, password } = body;
  
   // get oauth token
   let response = {};
