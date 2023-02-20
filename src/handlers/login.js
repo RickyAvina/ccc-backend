@@ -1,7 +1,6 @@
 // Create clients and set shared const values outside of the handler.
 const fetch = require('node-fetch');
 const dynamodb = require('aws-sdk/clients/dynamodb');
-const env = require("../../secret.json");
 
 // Get the DynamoDB table name from environment variables
 const userTable = process.env.USER_TABLE
@@ -19,40 +18,46 @@ exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     throw new Error(`getMethod only accept POST method, you tried: ${event.httpMethod}`);
   }
-  // All log statements are written to CloudWatch
-  console.info('received:', event);
-  const body = JSON.parse(event.body);
-  const {username: email, password } = body;
- 
-  // get oauth token
-  let response = {};
 
   try {
-    let { access_token } = await getOauthToken(email, password)
-    var params = {
-      TableName: userTable,
-      IndexName: "Email-index",
-      KeyConditionExpression: "email = :email",
-      ExpressionAttributeValues: {
-        ':email': email
-      }
-    }
+    // All log statements are written to CloudWatch
+    console.info('received:', event);
+    const body = JSON.parse(event.body);
+    const {username: email, password } = body;
+  
+    // get oauth token
+    let response = {};
 
-    await docClient.query(params).promise()
-      .then((data) => {
-        if (data.Items.length != 1) {
-          throw new Error("Expected 1 item, got " + data.Items.length);
+    try {
+      let { access_token } = await getOauthToken(email, password)
+      var params = {
+        TableName: userTable,
+        IndexName: "Email-index",
+        KeyConditionExpression: "email = :email",
+        ExpressionAttributeValues: {
+          ':email': email
         }
-        const user = data.Items[0]  // {"phone_number":143490349023,"email":"john@doe.com","id":"dfkjdksfj3kfekfd","name":"John Doe","bio":""}
-        user.access_token = access_token;
-        response = {statusCode: 200, body: JSON.stringify(user)};
-      })
-      .catch((error) => { throw new Error(error)});
-  } catch (e) {
-    console.error(e)
-    response = {statusCode: 500, body: JSON.stringify(e)}
-  } finally {
-    return response;
+      }
+
+      await docClient.query(params).promise()
+        .then((data) => {
+          if (data.Items.length != 1) {
+            throw new Error("Expected 1 item, got " + data.Items.length);
+          }
+          const user = data.Items[0]  // {"phone_number":143490349023,"email":"john@doe.com","id":"dfkjdksfj3kfekfd","name":"John Doe","bio":""}
+          user.access_token = access_token;
+          response = {statusCode: 200, body: JSON.stringify(user)};
+        })
+        .catch((error) => { throw new Error(error)});
+    } catch (e) {
+      console.error(e)
+      response = {statusCode: 500, body: JSON.stringify(e)}
+    } finally {
+      return response;
+    }
+  } catch(e) {
+    console.error(e);
+    return {statusCode: 500, body: JSON.stringify(e)}
   }
 }
 
@@ -65,8 +70,8 @@ async function getOauthToken(username, password) {
     password,
     audience: "https://dev-86rvru3cjw5ztru0.us.auth0.com/api/v2/",
     scope: "email",
-    client_id: env.auth0.client_id,
-    client_secret: env.auth0.client_secret
+    client_id: "Gwr6p98ErOSQtJXBqMXGZ8XRzBRsPQY3",
+    client_secret: "ARxNu23OgnnISH_5Yl6BrAS6ouX2zrwbITDbgaACd3lnjmP2heV4TRjiMObyyYIE"
   })
 
   const response = await fetch('https://dev-86rvru3cjw5ztru0.us.auth0.com/oauth/token', {

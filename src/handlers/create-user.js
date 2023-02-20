@@ -3,7 +3,7 @@
 // Create a DocumentClient that represents the query to add an item
 const dynamodb = require('aws-sdk/clients/dynamodb');
 const fetch = require('node-fetch');
-const env = require('../../secret.json');
+// const env = require('../../secret.json');
 
 const docClient = new dynamodb.DocumentClient();
 
@@ -37,7 +37,7 @@ exports.handler = async (event) => {
   const { email, password, name, phone_number } = body;
 
   const auth0ReqBody = {
-    client_id: env.auth0.client_id,
+    client_id: "Gwr6p98ErOSQtJXBqMXGZ8XRzBRsPQY3",
     email,
     password,
     connection: "Username-Password-Authentication",
