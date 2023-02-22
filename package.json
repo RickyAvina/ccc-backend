@@ -6,6 +6,7 @@
     "dependencies": {
         "aws-sdk": "^2.799.0",
         "node-fetch": "^2.6.1",
+        "node-postgres": "^0.6.2",
         "xml2js": "^0.4.23"
     },
     "devDependencies": {

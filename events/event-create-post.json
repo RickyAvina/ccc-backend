@@ -1,0 +1,4 @@
+{
+  "httpMethod": "POST",
+  "body": "{\"user_uuid\":\"id1234\",\"fileKey\":\"user/fname\",\"questions\":{\"insight\":\"Super insightful\",\"meaning\":\"Also super meaningful\",\"location\":\"Redwood City, CA, USA\"}}"
+}
